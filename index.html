@@ -7,75 +7,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: #050505; 
-            font-family: 'Inter', sans-serif;
-            background-image: radial-gradient(circle at 50% 50%, #1a0000 0%, #050505 100%);
-        }
+        body { background: #050505; font-family: 'Inter', sans-serif; background-image: radial-gradient(circle at 50% 50%, #1a0000 0%, #050505 100%); }
         .header-font { font-family: 'Orbitron', sans-serif; }
-        .glass-card { 
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(220, 38, 38, 0.2);
-        }
-        .neon-glow {
-            text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
-        }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-        }
-        .btn-viral {
-            animation: pulse-red 2s infinite;
-        }
+        .glass-card { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(220, 38, 38, 0.2); }
     </style>
 </head>
 <body class="text-white min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-md w-full glass-card p-8 rounded-[2.5rem] shadow-2xl">
-        <!-- Logo Section -->
-        <div class="text-center mb-10">
-            <div class="inline-block bg-red-600/10 px-4 py-1 rounded-full border border-red-600/30 mb-4">
-                <span class="text-red-500 text-[10px] tracking-[0.3em] font-bold uppercase">System Active</span>
-            </div>
-            <h1 class="header-font text-4xl font-black text-white italic tracking-tighter neon-glow">
-                VIRAL<span class="text-red-600">AI</span>
-            </h1>
-            <p class="text-gray-500 text-xs mt-2 font-light">Zenoic Cloud Intelligence Tool</p>
-        </div>
+    <div class="max-w-md w-full glass-card p-8 rounded-[2.5rem] shadow-2xl text-center">
+        <h1 class="header-font text-3xl font-black text-white italic tracking-tighter mb-8">VIRAL<span class="text-red-600">AI</span></h1>
         
-        <!-- Input Section -->
-        <div class="space-y-6">
-            <div class="relative group">
-                <input type="text" id="topic" placeholder="Enter Topic (e.g. Free Fire Tips)" 
-                    class="w-full p-5 rounded-2xl bg-black/40 border border-gray-800 focus:border-red-600 focus:ring-1 focus:ring-red-600 outline-none transition-all placeholder:text-gray-700 text-sm font-medium">
-            </div>
+        <input type="text" id="topic" placeholder="Topic: e.g. T-Series vs MrBeast" 
+            class="w-full p-4 mb-4 rounded-xl bg-black/40 border border-gray-800 outline-none text-sm">
             
-            <button onclick="getViralSecrets()" id="btn" 
-                class="btn-viral w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-2xl font-black text-sm tracking-widest uppercase transition-all flex items-center justify-center gap-3">
-                <span id="btnText">Execute Analysis</span>
-                <svg id="loader" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            </button>
-        </div>
+        <button onclick="getViralSecrets()" id="btn" class="w-full bg-red-600 p-4 rounded-xl font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+            <span id="btnText">Execute Analysis</span>
+        </button>
 
-        <!-- Result Section -->
-        <div id="result" class="mt-12 hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <div class="flex items-center justify-between mb-4 border-b border-gray-800 pb-2">
-                <h2 class="text-[10px] font-bold text-red-500 uppercase tracking-[0.2em]">Generated Strategy</h2>
-                <span class="text-[9px] text-gray-600 font-mono" id="timestamp"></span>
-            </div>
-            <div id="aiContent" class="bg-black/60 border border-gray-800/50 p-6 rounded-3xl text-gray-300 text-sm leading-relaxed whitespace-pre-wrap font-normal italic shadow-inner"></div>
-            <p class="text-[9px] text-gray-700 mt-6 text-center uppercase tracking-widest">Saved to Zenoic Firebase Cloud</p>
+        <div id="result" class="mt-8 hidden text-left">
+            <div id="aiContent" class="bg-black/60 p-5 rounded-2xl text-gray-300 text-xs leading-relaxed whitespace-pre-wrap"></div>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyCb3PQEqWmrHz4NDTaxDXsAFvAxrcC6bkY",
           authDomain: "zenoic-ai-suite.firebaseapp.com",
@@ -88,67 +45,50 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // API Keys (Security check needed for production)
         const YT_KEY = "AIzaSyBwBchc3gEBxy2UvuDDQwWlUvUs68c7ZnI"; 
         const GEMINI_KEY = "AIzaSyD-tLFz5V8H8P0X90SCFR7dLN63T8sMXzA";
 
         window.getViralSecrets = async () => {
-            const topicInput = document.getElementById('topic');
-            const topic = topicInput.value;
-            const btn = document.getElementById('btn');
+            const topic = document.getElementById('topic').value;
             const btnText = document.getElementById('btnText');
-            const loader = document.getElementById('loader');
             const resultDiv = document.getElementById('result');
             const aiContent = document.getElementById('aiContent');
-            const tsSpan = document.getElementById('timestamp');
 
-            if(!topic) return alert("Please enter a target topic!");
-
-            // UI Loading State
-            btn.disabled = true;
-            btnText.innerText = "Analyzing";
-            loader.classList.remove('hidden');
-            resultDiv.classList.add('hidden');
+            if(!topic) return alert("Topic enter karein!");
+            btnText.innerText = "Processing...";
 
             try {
-                // 1. YouTube Trend Analysis
-                const ytRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${topic}&type=video&maxResults=5&key=${YT_KEY}`);
+                // YouTube Fetch
+                const ytRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${topic}&type=video&maxResults=3&key=${YT_KEY}`);
                 const ytData = await ytRes.json();
-                
-                if(!ytData.items) throw new Error("YouTube API Limit Exceeded.");
-                const titles = ytData.items.map(v => v.snippet.title).join(" | ");
+                const titles = ytData.items?.map(v => v.snippet.title).join(", ") || "No trending data";
 
-                // 2. Gemini AI Strategy Generation
+                // Gemini Fetch with Safety
                 const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`, {
                     method: "POST",
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Topic: ${topic}. Trending Data: ${titles}. Provide a 1-sentence viral hook, 3 high-CTR titles, and 5 hidden tags. Be very aggressive and viral.` }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Topic: ${topic}. Data: ${titles}. Give 1 viral title and tags.` }] }] })
                 });
+
                 const aiData = await geminiRes.json();
+                
+                // CHECK: Agar AI ne answer nahi diya toh default msg dikhao
+                if (!aiData.candidates || !aiData.candidates[0]) {
+                    throw new Error("AI is busy. Please try again in 5 seconds.");
+                }
+
                 const aiText = aiData.candidates[0].content.parts[0].text;
 
-                // 3. Cloud Storage (Firebase)
-                await addDoc(collection(db, "viral_secrets"), {
-                    topic: topic,
-                    report: aiText,
-                    timestamp: new Date().toISOString()
-                });
+                // Save to Cloud
+                await addDoc(collection(db, "viral_secrets"), { topic, report: aiText, time: new Date().toISOString() });
 
-                // Success UI Update
                 aiContent.innerText = aiText;
-                tsSpan.innerText = new Date().toLocaleTimeString();
                 resultDiv.classList.remove('hidden');
+                btnText.innerText = "Execute Analysis";
 
             } catch (err) {
-                console.error(err);
-                alert("Critical System Error: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btnText.innerText = "Execute Analysis";
-                loader.classList.add('hidden');
-                topicInput.value = "";
+                alert(err.message);
+                btnText.innerText = "Try Again";
             }
         }
     </script>
