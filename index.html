@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral AI Secrets Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white p-5 font-sans">
+
+    <div class="max-w-lg mx-auto bg-gray-900 border border-red-900 p-8 rounded-2xl shadow-2xl">
+        <h1 class="text-3xl font-extrabold mb-2 text-center text-red-600">YouTube Viral AI</h1>
+        <p class="text-gray-400 text-center mb-8 text-sm">Real-time Trends & AI Secrets</p>
+        
+        <div class="space-y-4">
+            <input type="text" id="topic" placeholder="Enter Topic (e.g. Free Fire Trick)" 
+                class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:border-red-500 transition">
+            
+            <button onclick="getViralSecrets()" id="btn" 
+                class="w-full bg-red-600 hover:bg-red-700 p-3 rounded-lg font-bold text-lg shadow-lg transform active:scale-95 transition">
+                Analyze & Save Secrets
+            </button>
+        </div>
+
+        <div id="result" class="mt-10 hidden border-t border-gray-800 pt-6">
+            <h2 class="text-xl font-bold text-green-500 mb-2">🔥 Viral Strategy Found:</h2>
+            <div id="aiContent" class="bg-gray-800 p-4 rounded-lg text-gray-200 text-sm leading-relaxed mb-4"></div>
+            
+            <div class="flex items-center text-xs text-gray-500 mt-4">
+                <span class="bg-green-900 text-green-300 px-2 py-1 rounded">Saved to Firebase Firestore</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase & Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // --- STEP 1: Aapka Firebase Config ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyCb3PQEqWmrHz4NDTaxDXsAFvAxrcC6bkY",
+          authDomain: "zenoic-ai-suite.firebaseapp.com",
+          projectId: "zenoic-ai-suite",
+          storageBucket: "zenoic-ai-suite.firebasestorage.app",
+          messagingSenderId: "419401725665",
+          appId: "1:419401725665:web:e5f02e06834a9b0ae6a9a0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- STEP 2: Aapki API Keys ---
+        const YT_API_KEY = "AIzaSyBwBchc3gEBxy2UvuDDQwWlUvUs68c7ZnI"; 
+        const GEMINI_API_KEY = "AIzaSyD-tLFz5V8H8P0X90SCFR7dLN63T8sMXzA";
+
+        window.getViralSecrets = async () => {
+            const topic = document.getElementById('topic').value;
+            const btn = document.getElementById('btn');
+            const resultDiv = document.getElementById('result');
+            const aiContent = document.getElementById('aiContent');
+
+            if(!topic) return alert("Please enter a topic!");
+
+            btn.innerText = "⚡ Analyzing Trends...";
+            btn.disabled = true;
+
+            try {
+                // 1. YouTube Data Fetching
+                const ytRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${topic}&type=video&maxResults=5&key=${YT_API_KEY}`);
+                const ytData = await ytRes.json();
+                const videoInfo = ytData.items.map(v => v.snippet.title).join(" | ");
+
+                // 2. Gemini AI Brain Analysis
+                const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `YouTube titles: ${videoInfo}. Based on these, give me: 1. A High CTR Title for ${topic}. 2. Five Viral Tags. 3. A 10-second opening script hook.` }] }]
+                    })
+                });
+                const aiData = await geminiRes.json();
+                const aiResponse = aiData.candidates[0].content.parts[0].text;
+
+                // 3. Firestore mein Data Save karna
+                await addDoc(collection(db, "viral_secrets"), {
+                    topic: topic,
+                    analysis: aiResponse,
+                    time: new Date().toLocaleString()
+                });
+
+                // UI Update
+                aiContent.innerText = aiResponse;
+                resultDiv.classList.remove('hidden');
+                btn.innerText = "Analyze & Save Secrets";
+                btn.disabled = false;
+
+            } catch (err) {
+                console.error(err);
+                alert("Something went wrong. Check Console!");
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
