@@ -3,84 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO Meta Tags -->
-    <title>Zenoic Viral AI - YouTube Trending Strategy Tool</title>
-    <meta name="description" content="Zenoic Viral AI tool helps creators find trending YouTube titles, tags, and viral strategies using Gemini AI.">
-    <meta name="keywords" content="YouTube Viral Tool, AI Strategy, Zenoic AI, YouTube SEO, Trending Tags">
+    <!-- SEO Optimization -->
+    <title>Zenoic Viral AI - YouTube SEO & Content Strategy Tool</title>
+    <meta name="description" content="Zenoic Viral AI helps you generate trending YouTube titles and tags using Gemini AI. Get viral secrets for your videos instantly.">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            background: #020617; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: white;
-        }
-        .ai-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .glass {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .history-card:hover { border-color: #6366f1; }
+        body { background: #010101; font-family: 'Outfit', sans-serif; color: white; }
+        .glass-ui { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .gradient-text { background: linear-gradient(90deg, #ff0055, #7000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .loader-ring { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #ff0055; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen">
 
-    <!-- Header / Navbar -->
-    <nav class="p-6 border-b border-white/5 flex justify-between items-center glass sticky top-0 z-50">
-        <h1 class="text-2xl font-extrabold tracking-tighter">ZENOIC<span class="text-indigo-500">.AI</span></h1>
-        <div class="hidden md:block text-xs text-gray-400 font-mono">V3.0 HYPER-DRIVE</div>
-    </nav>
+    <header class="p-6 flex justify-between items-center glass-ui sticky top-0 z-50">
+        <h1 class="text-2xl font-black italic tracking-tighter">ZENOIC<span class="text-red-500">.AI</span></h1>
+        <div class="px-3 py-1 bg-red-600/20 rounded-full text-[10px] font-bold text-red-500 uppercase">Pro Cloud v4</div>
+    </header>
 
-    <main class="max-w-4xl mx-auto px-4 pt-12">
-        <!-- Hero Section -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-4">Make Your Video <br><span class="ai-gradient underline">Go Viral Today</span></h2>
-            <p class="text-gray-400 max-w-lg mx-auto text-sm">Real-time YouTube Trend Analysis powered by Gemini Pro Intelligence.</p>
+    <main class="max-w-3xl mx-auto px-6 py-12">
+        <div class="text-center mb-10">
+            <h2 class="text-5xl font-black mb-4">Generate <span class="gradient-text italic">Viral Content</span></h2>
+            <p class="text-gray-500 text-sm tracking-wide">Enter your video idea and let Gemini AI craft the perfect strategy.</p>
         </div>
 
-        <!-- Input Box -->
-        <div class="glass p-2 rounded-2xl flex flex-col md:flex-row gap-2 shadow-2xl mb-12">
-            <input type="text" id="topic" placeholder="Enter your video topic..." 
-                class="flex-1 bg-transparent p-4 outline-none text-white font-medium placeholder:text-gray-600">
-            <button onclick="generateViralSystem()" id="mainBtn" 
-                class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
-                <span>Analyze</span>
-                <div id="loader" class="hidden h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        <!-- Input Bar -->
+        <div class="glass-ui p-2 rounded-2xl flex gap-2 mb-12 group focus-within:border-red-600/50 transition-all">
+            <input type="text" id="topic" placeholder="e.g. Free Fire New Event Secret" 
+                class="flex-1 bg-transparent p-4 outline-none font-medium placeholder:text-gray-700">
+            <button onclick="runZenoicEngine()" id="btn" 
+                class="bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-all flex items-center gap-2">
+                <span>ANALYZE</span>
+                <div id="loading" class="hidden loader-ring"></div>
             </button>
         </div>
 
-        <!-- Main Output Result -->
-        <div id="resultContainer" class="hidden mb-16 animate-in fade-in zoom-in duration-500">
-            <div class="glass rounded-3xl p-8 border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
-                <div class="flex items-center gap-2 mb-6">
-                    <span class="bg-indigo-500 h-3 w-3 rounded-full animate-ping"></span>
-                    <h3 class="text-xs font-bold tracking-[0.3em] text-indigo-400 uppercase">Analysis Complete</h3>
+        <!-- Result Box -->
+        <div id="resultBox" class="hidden mb-12">
+            <div class="glass-ui rounded-3xl p-8 border-l-4 border-red-600">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Strategy Generated</span>
                 </div>
-                <div id="aiOutput" class="text-gray-200 leading-relaxed text-sm md:text-base whitespace-pre-wrap"></div>
+                <div id="aiText" class="text-gray-200 text-base leading-relaxed whitespace-pre-wrap italic"></div>
             </div>
         </div>
 
-        <!-- History Section -->
-        <section>
-            <div class="flex items-center justify-between mb-6">
-                <h4 class="text-lg font-bold">Recent History</h4>
-                <button onclick="clearHistory()" class="text-xs text-gray-500 hover:text-red-400">Clear All</button>
-            </div>
-            <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- History items will appear here -->
-            </div>
-        </section>
+        <!-- History Display -->
+        <div>
+            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                <span>Recent History</span>
+                <span id="historyCount" class="text-xs bg-gray-800 px-2 py-0.5 rounded text-gray-400">0</span>
+            </h3>
+            <div id="historyGrid" class="grid gap-4"></div>
+        </div>
     </main>
 
     <script type="module">
-        // Firebase and API Keys Integration
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -97,78 +80,63 @@
         const db = getFirestore(app);
 
         const YT_KEY = "AIzaSyBwBchc3gEBxy2UvuDDQwWlUvUs68c7ZnI";
-        const GEMINI_KEY = "AIzaSyD-tLFz5V8H8P0X90SCFR7dLN63T8sMXzA";
+        const GM_KEY = "AIzaSyD-tLFz5V8H8P0X90SCFR7dLN63T8sMXzA";
 
-        // Load History on Start
-        window.onload = () => displayHistory();
-
-        window.generateViralSystem = async () => {
-            const topic = document.getElementById('topic').value;
-            const btn = document.getElementById('mainBtn');
-            const loader = document.getElementById('loader');
-            const output = document.getElementById('aiOutput');
-            const container = document.getElementById('resultContainer');
-
-            if(!topic) return alert("Please enter a topic!");
-
-            btn.disabled = true;
-            loader.classList.remove('hidden');
-
-            try {
-                // 1. YouTube Fetch
-                const ytRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${topic}&type=video&maxResults=3&key=${YT_KEY}`);
-                const ytData = await ytRes.json();
-                const ytTitles = ytData.items?.map(v => v.snippet.title).join(" | ") || "No trend data";
-
-                // 2. Gemini Fetch
-                const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`, {
-                    method: "POST",
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Topic: ${topic}. YT Data: ${ytTitles}. Generate: 1. A viral headline. 2. 5 high-traffic tags. 3. Why this will work. Keep it professional.` }] }]
-                    })
-                });
-                const aiData = await geminiRes.json();
-                const strategy = aiData.candidates[0].content.parts[0].text;
-
-                // 3. Save to Firebase & Local History
-                await addDoc(collection(db, "viral_secrets"), { topic, strategy, time: new Date().toISOString() });
-                saveToLocalHistory(topic, strategy);
-
-                // UI Update
-                output.innerText = strategy;
-                container.classList.remove('hidden');
-                displayHistory();
-
-            } catch (e) {
-                alert("Error: AI is overloaded. Try again in 10s.");
-            } finally {
-                btn.disabled = false;
-                loader.classList.add('hidden');
-            }
-        };
-
-        function saveToLocalHistory(topic, strategy) {
-            let history = JSON.parse(localStorage.getItem('zenoic_history') || "[]");
-            history.unshift({ topic, strategy, date: new Date().toLocaleDateString() });
-            localStorage.setItem('zenoic_history', JSON.stringify(history.slice(0, 6))); // Keep last 6
-        }
-
-        function displayHistory() {
-            const list = document.getElementById('historyList');
-            const history = JSON.parse(localStorage.getItem('zenoic_history') || "[]");
-            list.innerHTML = history.map(item => `
-                <div class="glass p-4 rounded-2xl border-white/5 history-card transition-all cursor-pointer">
-                    <p class="text-xs text-indigo-400 font-bold mb-1">${item.date}</p>
-                    <h5 class="text-sm font-semibold mb-2">${item.topic}</h5>
-                    <p class="text-[10px] text-gray-500 line-clamp-2">${item.strategy}</p>
+        // Local History Initialization
+        const updateUIHistory = () => {
+            const history = JSON.parse(localStorage.getItem('zHistory') || "[]");
+            document.getElementById('historyCount').innerText = history.length;
+            document.getElementById('historyGrid').innerHTML = history.map(h => `
+                <div class="glass-ui p-5 rounded-2xl border-white/5">
+                    <h4 class="text-sm font-bold text-red-500 mb-1">${h.topic}</h4>
+                    <p class="text-[11px] text-gray-500 line-clamp-2 italic">${h.data}</p>
                 </div>
             `).join('');
-        }
+        };
+        updateUIHistory();
 
-        window.clearHistory = () => {
-            localStorage.removeItem('zenoic_history');
-            displayHistory();
+        window.runZenoicEngine = async () => {
+            const topic = document.getElementById('topic').value;
+            const btn = document.getElementById('btn');
+            const loader = document.getElementById('loading');
+            const resBox = document.getElementById('resultBox');
+            const aiText = document.getElementById('aiText');
+
+            if(!topic) return;
+            btn.disabled = true; loader.classList.remove('hidden');
+
+            try {
+                // 1. YouTube Step
+                const yt = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${topic}&maxResults=3&key=${YT_KEY}`).then(r => r.json());
+                const trendInfo = yt.items?.map(i => i.snippet.title).join(" | ") || "Global Trends";
+
+                // 2. Gemini Step
+                const gm = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GM_KEY}`, {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `YouTube Topic: ${topic}. Trends: ${trendInfo}. Provide 3 Viral Titles, 5 Tags, and 1 Secret Hook.` }] }] })
+                }).then(r => r.json());
+
+                const finalStrategy = gm.candidates[0].content.parts[0].text;
+
+                // 3. Save to Firebase & Local
+                await addDoc(collection(db, "viral_secrets"), { topic, finalStrategy, date: new Date().toISOString() });
+                
+                let h = JSON.parse(localStorage.getItem('zHistory') || "[]");
+                h.unshift({ topic, data: finalStrategy });
+                localStorage.setItem('zHistory', JSON.stringify(h.slice(0, 5)));
+
+                // UI Final
+                aiText.innerText = finalStrategy;
+                resBox.classList.remove('hidden');
+                updateUIHistory();
+                document.getElementById('topic').value = "";
+
+            } catch (err) {
+                alert("Gemini is cooling down. Wait 10 seconds.");
+            } finally {
+                btn.disabled = false; loader.classList.add('hidden');
+            }
         };
     </script>
 </body>
